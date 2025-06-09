@@ -18,15 +18,9 @@ if [ ! -d $filesdir ]; then
     exit 1
 fi
 
-tempfile=$(mktemp)
+countfiles=$(find $filesdir -type f | wc -l)
+matchinglines=$(grep -r $searchstr $filesdir | wc -l)
 
-grep -rch $searchstr $filesdir > $tempfile
-
-matchingfiles=$(cat $tempfile | awk '$1>0 {print $1; }'| wc -l)
-matchinglines=$(cat $tempfile | awk '{ SUM += $1} END { print SUM }')
-
-echo "The number of files are $matchingfiles and the number of matching lines are $matchinglines"
-
-rm $tempfile
+echo "The number of files are $countfiles and the number of matching lines are $matchinglines"
 
 exit 0
